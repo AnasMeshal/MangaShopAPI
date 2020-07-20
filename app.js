@@ -1,15 +1,29 @@
 const express = require("express");
 const cors = require("cors");
+const slugify = require("slugify");
 
 //Data
 let mangas = require("./mangas");
 
+const bodyParser = require("body-parser");
+
 const app = express();
 
 app.use(cors());
+app.use(bodyParser.json());
 
 app.get("/mangas", (req, res) => {
   res.json(mangas);
+});
+
+app.post("/mangas", (req, res) => {
+  idCounter = mangas.length + 1;
+  const id = idCounter;
+  const slug = slugify(req.body.name, { lower: true });
+  const newManga = { id, slug, ...req.body };
+  mangas.push(newManga);
+  this.idCounter++;
+  res.status(201).json(newManga);
 });
 
 app.delete("/mangas/:mangaId", (req, res) => {

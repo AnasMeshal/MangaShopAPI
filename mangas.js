@@ -139,8 +139,8 @@ const mangas = [
 
   {
     id: 14,
-    name: "JoJo's Bizarre Adventure",
-    slug: "jojo's-bizarre-adventure",
+    name: "JoJo's Bizarre",
+    slug: "jojo's-bizarre",
     description: " is an Adventure, Fantasy and Supernatural manga.",
     author: "Hirohiko Araki",
     price: 2.5,
