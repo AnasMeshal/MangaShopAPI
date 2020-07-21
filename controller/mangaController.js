@@ -1,7 +1,7 @@
 const slugify = require("slugify");
 
 //Data
-let mangas = require("./mangas");
+let mangas = require("../mangas");
 
 exports.mangaFetch = (req, res) => {
   res.json(mangas);
