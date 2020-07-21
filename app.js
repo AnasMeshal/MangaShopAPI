@@ -38,6 +38,18 @@ app.delete("/mangas/:mangaId", (req, res) => {
   }
 });
 
+app.put("/mangas/:mangaId", (req, res) => {
+  const { mangaId } = req.params;
+  const foundManga = mangas.find((manga) => manga.id === +mangaId);
+
+  if (foundManga) {
+    for (const key in req.body) foundManga[key] = req.body[key];
+    res.status(204).end();
+  } else {
+    res.status(404).json({ message: "a manga with this ID doesn't exist." });
+  }
+});
+
 app.listen(8000, () => {
   console.log("Running on localhost:8000");
 });
