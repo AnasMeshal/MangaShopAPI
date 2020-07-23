@@ -1,42 +1,54 @@
 const slugify = require("slugify");
 
 //Data
-let mangas = require("../mangas");
+const { Manga } = require("../db/models");
 
-exports.mangaFetch = (req, res) => {
-  res.json(mangas);
-};
-
-exports.mangaCreate = (req, res) => {
-  idCounter = mangas.length + 1;
-  const id = idCounter;
-  const slug = slugify(req.body.name, { lower: true });
-  const newManga = { id, slug, ...req.body };
-  mangas.push(newManga);
-  this.idCounter++;
-  res.status(201).json(newManga);
-};
-
-exports.mangaDelete = (req, res) => {
-  const { mangaId } = req.params;
-  const foundManga = mangas.find((manga) => manga.id === +mangaId);
-
-  if (foundManga) {
-    mangas = mangas.filter((_manga) => _manga !== foundManga);
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "a manga with this ID doesn't exist." });
+exports.mangaFetch = async (req, res) => {
+  try {
+    const mangas = await Manga.findAll({
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+    res.json(mangas);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
-exports.mangaUpdate = (req, res) => {
-  const { mangaId } = req.params;
-  const foundManga = mangas.find((manga) => manga.id === +mangaId);
+exports.mangaCreate = async (req, res) => {
+  try {
+    const newManga = await Manga.create(req.body);
+    res.status(201).json(newManga);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
-  if (foundManga) {
-    for (const key in req.body) foundManga[key] = req.body[key];
-    res.status(204).end();
-  } else {
-    res.status(404).json({ message: "a manga with this ID doesn't exist." });
+exports.mangaDelete = async (req, res) => {
+  const { mangaId } = req.params;
+  try {
+    const foundManga = await Manga.findByPk(mangaId);
+    if (foundManga) {
+      await foundManga.destroy();
+      res.status(204).end();
+    } else {
+      res.status(404).json({ message: "Manga not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.mangaUpdate = async (req, res) => {
+  const { mangaId } = req.params;
+  try {
+    const foundManga = await Manga.findByPk(mangaId);
+    if (foundManga) {
+      await foundManga.update(req.body);
+      res.status(204).end();
+    } else {
+      res.status(404).json({ message: "Manga not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
