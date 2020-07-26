@@ -22,6 +22,17 @@ const run = async () => {
   app.use(bodyParser.json());
   app.use("/mangas", mangaRoutes);
 
+  app.use((req, res, next) => {
+    const error = new Error("Path Not Found");
+    error.status = 404;
+    next(error);
+  });
+
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500);
+    res.json(err.message || "Internal Server Error.");
+  });
+
   await app.listen(8000, () => {
     console.log("The application is running on localhost:8000");
   });

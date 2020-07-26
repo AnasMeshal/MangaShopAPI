@@ -1,54 +1,49 @@
-const slugify = require("slugify");
-
 //Data
 const { Manga } = require("../db/models");
 
-exports.mangaFetch = async (req, res) => {
+exports.fetchManga = async (MangaId, next) => {
+  try {
+    const manga = await Manga.findByPk(MangaId);
+    return manga;
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.mangaFetch = async (req, res, next) => {
   try {
     const mangas = await Manga.findAll({
       attributes: { exclude: ["createdAt", "updatedAt"] },
     });
     res.json(mangas);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.mangaCreate = async (req, res) => {
+exports.mangaCreate = async (req, res, next) => {
   try {
     const newManga = await Manga.create(req.body);
     res.status(201).json(newManga);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.mangaDelete = async (req, res) => {
-  const { mangaId } = req.params;
+exports.mangaDelete = async (req, res, next) => {
   try {
-    const foundManga = await Manga.findByPk(mangaId);
-    if (foundManga) {
-      await foundManga.destroy();
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "Manga not found" });
-    }
+    await req.manga.destroy();
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
-exports.mangaUpdate = async (req, res) => {
-  const { mangaId } = req.params;
+exports.mangaUpdate = async (req, res, next) => {
   try {
-    const foundManga = await Manga.findByPk(mangaId);
-    if (foundManga) {
-      await foundManga.update(req.body);
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: "Manga not found" });
-    }
+    await req.manga.update(req.body);
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
