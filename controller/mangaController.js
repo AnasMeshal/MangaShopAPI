@@ -10,26 +10,17 @@ exports.fetchManga = async (MangaId, next) => {
   }
 };
 
-exports.mangaFetch = async (req, res, next) => {
+exports.mangaList = async (req, res, next) => {
   try {
     const mangas = await Manga.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
+      attributes: { exclude: ["vendorId", "createdAt", "updatedAt"] },
+      include: {
+        model: Vendor,
+        as: "vendor",
+        attributes: ["name"],
+      },
     });
     res.json(mangas);
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.mangaCreate = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
-    }
-    const newManga = await Manga.create(req.body);
-    res.status(201).json(newManga);
   } catch (error) {
     next(error);
   }

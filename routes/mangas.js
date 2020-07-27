@@ -5,8 +5,7 @@ const upload = require("../middleware/multer");
 //Controller
 const {
   fetchManga,
-  mangaFetch,
-  mangaCreate,
+  mangaList,
   mangaUpdate,
   mangaDelete,
 } = require("../controller/mangaController");
@@ -23,9 +22,7 @@ router.param("mangaId", async (req, res, next, mangaId) => {
   }
 });
 
-router.get("/", mangaFetch);
-
-router.post("/", upload.single("image"), mangaCreate);
+router.get("/", mangaList);
 
 router.put("/:mangaId", upload.single("image"), mangaUpdate);
 

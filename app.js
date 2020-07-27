@@ -8,6 +8,8 @@ const db = require("./db");
 // Routes
 const mangaRoutes = require("./routes/mangas");
 
+const vendorRoutes = require("./routes/vendors");
+
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -21,6 +23,7 @@ const run = async () => {
   }
   app.use(cors());
   app.use(bodyParser.json());
+  app.use("/vendors", vendorRoutes);
   app.use("/mangas", mangaRoutes);
   app.use("/media", express.static(path.join(__dirname, "media")));
 
