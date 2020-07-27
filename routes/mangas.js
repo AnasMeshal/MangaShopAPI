@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const upload = require("../middleware/multer");
 
 //Controller
 const {
@@ -24,9 +25,9 @@ router.param("mangaId", async (req, res, next, mangaId) => {
 
 router.get("/", mangaFetch);
 
-router.post("/", mangaCreate);
+router.post("/", upload.single("image"), mangaCreate);
 
-router.put("/:mangaId", mangaUpdate);
+router.put("/:mangaId", upload.single("image"), mangaUpdate);
 
 router.delete("/:mangaId", mangaDelete);
 

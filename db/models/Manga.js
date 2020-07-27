@@ -18,7 +18,7 @@ Manga.init(
     description: { type: DataTypes.STRING, allowNull: false },
 
     price: {
-      type: DataTypes.NUMBER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
       validate: {
@@ -28,7 +28,7 @@ Manga.init(
 
     author: { type: DataTypes.STRING, allowNull: false },
 
-    img: { type: DataTypes.STRING, isUrl: true },
+    image: { type: DataTypes.STRING },
   },
   {
     sequelize: db,

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 //Data
 const db = require("./db");
@@ -21,6 +22,7 @@ const run = async () => {
   app.use(cors());
   app.use(bodyParser.json());
   app.use("/mangas", mangaRoutes);
+  app.use("/media", express.static(path.join(__dirname, "media")));
 
   app.use((req, res, next) => {
     const error = new Error("Path Not Found");
