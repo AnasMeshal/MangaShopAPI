@@ -13,7 +13,7 @@ exports.fetchVendor = async (VendorId, next) => {
 exports.vendorList = async (req, res, next) => {
   try {
     const vendors = await Vendor.findAll({
-      attributes: ["id", "name"],
+      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: {
         model: Manga,
         as: "mangas",

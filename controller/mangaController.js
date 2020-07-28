@@ -1,5 +1,5 @@
 //Data
-const { Manga } = require("../db/models");
+const { Manga, Vendor } = require("../db/models");
 
 exports.fetchManga = async (MangaId, next) => {
   try {
