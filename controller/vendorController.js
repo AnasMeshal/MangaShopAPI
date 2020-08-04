@@ -17,7 +17,7 @@ exports.vendorList = async (req, res, next) => {
       include: {
         model: Manga,
         as: "mangas",
-        attributes: { exclude: ["createdAt", "updatedAt"] },
+        attributes: ["id"],
       },
     });
     res.json(vendors);
