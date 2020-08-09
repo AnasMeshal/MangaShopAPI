@@ -7,8 +7,8 @@ const db = require("./db");
 
 // Routes
 const mangaRoutes = require("./routes/mangas");
-
 const vendorRoutes = require("./routes/vendors");
+const userRoutes = require("./routes/users");
 
 const bodyParser = require("body-parser");
 
@@ -26,6 +26,7 @@ const run = async () => {
   app.use("/vendors", vendorRoutes);
   app.use("/mangas", mangaRoutes);
   app.use("/media", express.static(path.join(__dirname, "media")));
+  app.use(userRoutes);
 
   app.use((req, res, next) => {
     const error = new Error("Path Not Found");

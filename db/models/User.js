@@ -9,13 +9,19 @@ User.init(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        args: true,
+        msg: "Username already exists",
+      },
     },
 
     email: {
       type: DataTypes.STRING,
-      unique: true,
       isEmail: true,
+      unique: {
+        args: true,
+        msg: "Username already exists",
+      },
     },
 
     password: { type: DataTypes.STRING, allowNull: false },
