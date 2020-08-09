@@ -1,6 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+const passport = require("passport");
+
+// Passport Strategies
+const { localStrategy } = require("./middleware/passport");
 
 //Data
 const db = require("./db");
@@ -9,10 +13,13 @@ const db = require("./db");
 const mangaRoutes = require("./routes/mangas");
 const vendorRoutes = require("./routes/vendors");
 const userRoutes = require("./routes/users");
-
 const bodyParser = require("body-parser");
 
 const app = express();
+
+// Passport Setup
+app.use(passport.initialize());
+passport.use(localStrategy);
 
 const run = async () => {
   try {
@@ -21,8 +28,11 @@ const run = async () => {
   } catch (error) {
     console.error("Error connecting to the database: ", error);
   }
+
   app.use(cors());
   app.use(bodyParser.json());
+
+  //Routes
   app.use("/vendors", vendorRoutes);
   app.use("/mangas", mangaRoutes);
   app.use("/media", express.static(path.join(__dirname, "media")));
