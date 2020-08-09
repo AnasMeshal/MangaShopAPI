@@ -1,5 +1,6 @@
 const Manga = require("./Manga");
 const Vendor = require("./Vendor");
+const User = require("./User");
 
 Vendor.hasMany(Manga, {
   foreignKey: { fieldName: "vendorId", allowNull: false },
@@ -13,4 +14,5 @@ Manga.belongsTo(Vendor, {
 module.exports = {
   Manga,
   Vendor,
+  User,
 };
