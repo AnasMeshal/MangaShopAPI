@@ -4,7 +4,7 @@ const { User } = require("../db/models");
 
 exports.localStrategy = new LocalStrategy(async (username, password, done) => {
   try {
-    const user = User.findOne({
+    const user = await User.findOne({
       where: { username },
     });
 
