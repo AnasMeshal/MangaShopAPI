@@ -22,6 +22,7 @@ exports.signin = (req, res, next) => {
   try {
     const { user } = req;
     const payload = {
+      role: user.role,
       id: user.id,
       username: user.username,
       email: user.email,

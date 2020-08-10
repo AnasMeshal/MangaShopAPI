@@ -6,6 +6,10 @@ class User extends Model {}
 
 User.init(
   {
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: "customer",
+    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
