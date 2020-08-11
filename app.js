@@ -4,7 +4,7 @@ const path = require("path");
 const passport = require("passport");
 
 // Passport Strategies
-const { localStrategy } = require("./middleware/passport");
+const { localStrategy, jwtStrategy } = require("./middleware/passport");
 
 //Data
 const db = require("./db");
@@ -20,6 +20,7 @@ const app = express();
 // Passport Setup
 app.use(passport.initialize());
 passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 const run = async () => {
   try {
