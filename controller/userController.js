@@ -8,11 +8,22 @@ const { User } = require("../db/models");
 exports.signup = async (req, res, next) => {
   const { password } = req.body;
   const saltRounds = 10;
+
   try {
     const hashedpassword = await bcrypt.hash(password, saltRounds);
     req.body.password = hashedpassword;
     const newUser = await User.create(req.body);
-    res.status(201).json(newUser);
+    const payload = {
+      id: newUser.id,
+      username: newUser.username,
+      email: newUser.email,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      role: newUser.role,
+      expires: Date.now() + JWT_EXPIRATION_MS,
+    };
+    const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
+    res.status(201).json({ token });
   } catch (error) {
     next(error);
   }
