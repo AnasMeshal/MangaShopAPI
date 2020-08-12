@@ -51,13 +51,19 @@ exports.vendorCreate = async (req, res, next) => {
 
 exports.vendorUpdate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.role === "admin" || req.user.id === req.vendor.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      await req.vendor.update(req.body);
+      res.status(204).end();
+    } else {
+      const error = new Error("Unauthorized");
+      error.status = 401;
+      next(err);
     }
-    await req.vendor.update(req.body);
-    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -65,8 +71,14 @@ exports.vendorUpdate = async (req, res, next) => {
 
 exports.vendorDelete = async (req, res, next) => {
   try {
-    await req.vendor.destroy();
-    res.status(204).end();
+    if (req.user.role === "admin" || req.user.id === req.bakery.userId) {
+      await req.vendor.destroy();
+      res.status(204).end();
+    } else {
+      const error = new Error("Unauthorized");
+      error.status = 401;
+      next(error);
+    }
   } catch (error) {
     next(error);
   }
@@ -74,14 +86,20 @@ exports.vendorDelete = async (req, res, next) => {
 
 exports.mangaCreate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.id === req.vendor.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      req.body.vendorId = req.vendor.id;
+      const newManga = await Manga.create(req.body);
+      res.status(201).json(newManga);
+    } else {
+      const error = new Error("Unauthorized");
+      error.status = 401;
+      next(error);
     }
-    req.body.vendorId = req.vendor.id;
-    const newManga = await Manga.create(req.body);
-    res.status(201).json(newManga);
   } catch (error) {
     next(error);
   }

@@ -34,10 +34,24 @@ router.post(
   vendorCreate
 );
 
-router.put("/:vendorId", upload.single("image"), vendorUpdate);
+router.put(
+  "/:vendorId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  vendorUpdate
+);
 
-router.delete("/:vendorId", vendorDelete);
+router.delete(
+  "/:vendorId",
+  passport.authenticate("jwt", { session: false }),
+  vendorDelete
+);
 
-router.post("/:vendorId/mangas", upload.single("image"), mangaCreate);
+router.post(
+  "/:vendorId/mangas",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  mangaCreate
+);
 
 module.exports = router;
