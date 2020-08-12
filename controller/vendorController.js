@@ -33,6 +33,8 @@ exports.vendorCreate = async (req, res, next) => {
         req.file.filename
       }`;
     }
+    req.body.userId = req.user.id;
+    console.log("this is a test", req.user);
     const newVendor = await Vendor.create(req.body);
     res.status(201).json(newVendor);
   } catch (error) {

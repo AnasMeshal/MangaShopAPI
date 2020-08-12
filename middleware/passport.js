@@ -34,11 +34,11 @@ exports.jwtStrategy = new JWTStrategy(
     secretOrKey: JWT_SECRET,
   },
   async (jwtPayload, done) => {
-    if (Date.now > jwtPayload.expires) {
+    if (Date.now() > jwtPayload.expires) {
       return done(null, false);
     }
     try {
-      const user = User.findByPk(jwtPayload.id);
+      const user = await User.findByPk(jwtPayload.id);
       return done(null, user);
     } catch (error) {
       done(error);
