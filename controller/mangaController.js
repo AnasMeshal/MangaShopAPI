@@ -28,13 +28,19 @@ exports.mangaList = async (req, res, next) => {
 
 exports.mangaUpdate = async (req, res, next) => {
   try {
-    if (req.file) {
-      req.body.image = `${req.protocol}://${req.get("host")}/media/${
-        req.file.filename
-      }`;
+    if (req.user.id === req.vendor.userId) {
+      if (req.file) {
+        req.body.image = `${req.protocol}://${req.get("host")}/media/${
+          req.file.filename
+        }`;
+      }
+      await req.manga.update(req.body);
+      res.status(204).end();
+    } else {
+      const error = new Error("Unauthorized");
+      error.status = 401;
+      next(error);
     }
-    await req.manga.update(req.body);
-    res.status(204).end();
   } catch (error) {
     next(error);
   }
@@ -42,8 +48,14 @@ exports.mangaUpdate = async (req, res, next) => {
 
 exports.mangaDelete = async (req, res, next) => {
   try {
-    await req.manga.destroy();
-    res.status(204).end();
+    if (req.user.id === req.vendor.userId) {
+      await req.manga.destroy();
+      res.status(204).end();
+    } else {
+      const error = new Error("Unauthorized");
+      error.status = 401;
+      next(error);
+    }
   } catch (error) {
     next(error);
   }

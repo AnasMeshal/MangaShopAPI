@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("../middleware/multer");
+const passport = require("passport");
 
 //Controller
 const {
@@ -24,8 +25,17 @@ router.param("mangaId", async (req, res, next, mangaId) => {
 
 router.get("/", mangaList);
 
-router.put("/:mangaId", upload.single("image"), mangaUpdate);
+router.put(
+  "/:mangaId",
+  passport.authenticate("jwt", { session: false }),
+  upload.single("image"),
+  mangaUpdate
+);
 
-router.delete("/:mangaId", mangaDelete);
+router.delete(
+  "/:mangaId",
+  passport.authenticate("jwt", { session: false }),
+  mangaDelete
+);
 
 module.exports = router;
