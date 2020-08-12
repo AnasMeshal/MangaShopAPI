@@ -28,13 +28,20 @@ exports.vendorList = async (req, res, next) => {
 
 exports.vendorCreate = async (req, res, next) => {
   try {
+    const foundVendor = await Vendor.findOne({
+      where: { userId: req.user.id },
+    });
+    if (foundVendor) {
+      const error = new Error("Oops, you have created more than one vendor");
+      error.status = 403;
+      next(error);
+    }
     if (req.file) {
       req.body.image = `${req.protocol}://${req.get("host")}/media/${
         req.file.filename
       }`;
     }
     req.body.userId = req.user.id;
-    console.log("this is a test", req.user);
     const newVendor = await Vendor.create(req.body);
     res.status(201).json(newVendor);
   } catch (error) {
