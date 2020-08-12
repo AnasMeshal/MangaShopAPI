@@ -21,6 +21,7 @@ exports.signup = async (req, res, next) => {
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       expires: Date.now() + JWT_EXPIRATION_MS,
+      vendorSlug: null,
     };
     const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
     res.status(201).json({ token });
@@ -29,8 +30,12 @@ exports.signup = async (req, res, next) => {
   }
 };
 
-exports.signin = (req, res, next) => {
+exports.signin = async (req, res, next) => {
   try {
+    const foundVendor = await Vendor.findOne({
+      where: { userId: req.user.id },
+    });
+
     const { user } = req;
     const payload = {
       role: user.role,
@@ -39,6 +44,7 @@ exports.signin = (req, res, next) => {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
+      vendorSlug: foundVendor.slug,
       expires: Date.now() + parseInt(JWT_EXPIRATION_MS),
     };
     const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
