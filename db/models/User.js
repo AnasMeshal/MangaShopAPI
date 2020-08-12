@@ -22,10 +22,6 @@ User.init(
     email: {
       type: DataTypes.STRING,
       isEmail: true,
-      unique: {
-        args: true,
-        msg: "Username already exists",
-      },
     },
 
     password: { type: DataTypes.STRING, allowNull: false },
