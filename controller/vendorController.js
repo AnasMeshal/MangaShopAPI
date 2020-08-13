@@ -71,7 +71,7 @@ exports.vendorUpdate = async (req, res, next) => {
 
 exports.vendorDelete = async (req, res, next) => {
   try {
-    if (req.user.role === "admin" || req.user.id === req.bakery.userId) {
+    if (req.user.role === "admin" || req.user.id === req.vendor.userId) {
       await req.vendor.destroy();
       res.status(204).end();
     } else {
