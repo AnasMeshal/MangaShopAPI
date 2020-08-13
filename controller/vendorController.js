@@ -34,7 +34,7 @@ exports.vendorCreate = async (req, res, next) => {
     if (foundVendor) {
       const error = new Error("Oops, you have created more than one vendor");
       error.status = 403;
-      next(error);
+      return next(error);
     }
     if (req.file) {
       req.body.image = `${req.protocol}://${req.get("host")}/media/${

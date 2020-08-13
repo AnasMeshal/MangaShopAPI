@@ -24,7 +24,7 @@ passport.use(jwtStrategy);
 
 const run = async () => {
   try {
-    await db.sync({ alter: true });
+    await db.sync({ force: true });
     console.log("Connection to the database successful!");
   } catch (error) {
     console.error("Error connecting to the database: ", error);

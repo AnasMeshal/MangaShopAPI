@@ -3,7 +3,13 @@ const { Manga, Vendor } = require("../db/models");
 
 exports.fetchManga = async (MangaId, next) => {
   try {
-    const manga = await Manga.findByPk(MangaId);
+    const manga = await Manga.findByPk(MangaId, {
+      include: {
+        model: Vendor,
+        as: "vendor",
+        attributes: ["userId"],
+      },
+    });
     return manga;
   } catch (error) {
     next(error);
@@ -28,7 +34,8 @@ exports.mangaList = async (req, res, next) => {
 
 exports.mangaUpdate = async (req, res, next) => {
   try {
-    if (req.user.id === req.vendor.userId) {
+    console.log(req.manga.vendor.userId);
+    if (req.user.id === req.manga.vendor.userId) {
       if (req.file) {
         req.body.image = `${req.protocol}://${req.get("host")}/media/${
           req.file.filename
@@ -48,7 +55,7 @@ exports.mangaUpdate = async (req, res, next) => {
 
 exports.mangaDelete = async (req, res, next) => {
   try {
-    if (req.user.id === req.vendor.userId) {
+    if (req.user.id === req.manga.vendor.userId) {
       await req.manga.destroy();
       res.status(204).end();
     } else {
