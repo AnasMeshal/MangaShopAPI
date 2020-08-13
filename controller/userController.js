@@ -3,7 +3,7 @@ const { JWT_EXPIRATION_MS, JWT_SECRET } = require("../config/keys");
 const jwt = require("jsonwebtoken");
 
 //Data
-const { User } = require("../db/models");
+const { User, Vendor } = require("../db/models");
 
 exports.signup = async (req, res, next) => {
   const { password } = req.body;
