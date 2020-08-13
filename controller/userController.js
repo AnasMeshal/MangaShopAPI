@@ -44,7 +44,7 @@ exports.signin = async (req, res, next) => {
       email: user.email,
       firstName: user.firstName,
       lastName: user.lastName,
-      vendorSlug: foundVendor.slug,
+      vendorSlug: foundVendor && foundVendor.vendorSlug,
       expires: Date.now() + parseInt(JWT_EXPIRATION_MS),
     };
     const token = jwt.sign(JSON.stringify(payload), JWT_SECRET);
