@@ -16,6 +16,7 @@ const userRoutes = require("./routes/users");
 const bodyParser = require("body-parser");
 
 const app = express();
+const PORT = process.env.PORT || 8000;
 
 // Passport Setup
 app.use(passport.initialize());
@@ -50,8 +51,8 @@ const run = async () => {
     res.json(err.message || "Internal Server Error.");
   });
 
-  await app.listen(8000, () => {
-    console.log("The application is running on localhost:8000");
+  await app.listen(PORT, () => {
+    console.log(`The application is running on localhost:${PORT}`);
   });
 };
 
