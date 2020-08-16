@@ -37,9 +37,9 @@ exports.mangaUpdate = async (req, res, next) => {
     console.log(req.manga.vendor.userId);
     if (req.user.id === req.manga.vendor.userId) {
       if (req.file) {
-        req.body.image = `${req.protocol}://${req.get("host")}/media/${
-          req.file.filename
-        }`;
+        req.body.image = `${process.env.PORT ? "https" : "http"}://${req.get(
+          "host"
+        )}/media/${req.file.filename}`;
       }
       await req.manga.update(req.body);
       res.status(204).end();
