@@ -13,6 +13,7 @@ const db = require("./db");
 const mangaRoutes = require("./routes/mangas");
 const vendorRoutes = require("./routes/vendors");
 const userRoutes = require("./routes/users");
+const orderRoutes = require("./routes/orders");
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -39,6 +40,7 @@ const run = async () => {
   app.use("/mangas", mangaRoutes);
   app.use("/media", express.static(path.join(__dirname, "media")));
   app.use(userRoutes);
+  app.use(orderRoutes);
 
   app.use((req, res, next) => {
     const error = new Error("Path Not Found");
