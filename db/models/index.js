@@ -18,8 +18,8 @@ Manga.belongsTo(Vendor, {
 User.hasMany(Order, { as: "orders", foreignKey: "userId" });
 Order.belongsTo(User, { as: "user" });
 
-Order.belongsToMany(Manga, { through: OrderItem });
-Manga.belongsToMany(Order, { through: OrderItem });
+Order.belongsToMany(Manga, { through: OrderItem, foreignKey: "orderId" });
+Manga.belongsToMany(Order, { through: OrderItem, foreignKey: "MangaId" });
 
 module.exports = {
   Manga,
