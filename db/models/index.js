@@ -2,6 +2,7 @@ const Manga = require("./Manga");
 const Vendor = require("./Vendor");
 const User = require("./User");
 const Order = require("./Order");
+const OrderItem = require("./OrderItem");
 
 User.hasOne(Vendor, { foreignKey: "userId" });
 Vendor.belongsTo(User, { as: "user" });
@@ -17,9 +18,13 @@ Manga.belongsTo(Vendor, {
 User.hasMany(Order, { as: "orders", foreignKey: "userId" });
 Order.belongsTo(User, { as: "user" });
 
+Order.belongsToMany(Manga, { through: OrderItem });
+Manga.belongsToMany(Order, { through: OrderItem });
+
 module.exports = {
   Manga,
   Vendor,
   User,
   Order,
+  OrderItem,
 };
